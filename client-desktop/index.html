@@ -7,5 +7,19 @@
   <body>
     <h1>Daily Logger</h1>
     <p>This is an app that will help you track your time.</p>
+    <script>
+
+      function showNotification() {
+        let myNotification = new Notification('Daily Logger', {
+          body: 'This is a test notification'
+        })
+
+        myNotification.onclick = () => {
+          console.log('Notification clicked')
+        }
+      }
+
+      setInterval(showNotification, 2000);
+    </script>
   </body>
 </html>
