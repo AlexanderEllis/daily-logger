@@ -54,4 +54,9 @@ function notifyMe() {
   // want to be respectful there is no need to bother them any more.
 }
 
+function hideLogging() {
+    document.getElementById('waiting').style.display = 'block';
+    document.getElementById('logging').style.display = 'none';
+}
+
 notifyAtNextDuration(REPEAT_EVERY_DURATION);
