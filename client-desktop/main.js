@@ -15,10 +15,11 @@ let win;
 // Global tray object
 let tray;
 
+// Global trayHighlight variable to access in tray and window code
+let trayHighlighted = false;
+
 function createWindow(x, y) {
   // Create new browser window
-  console.log(x);
-  console.log(y);
   const width = 500;
   const height = 300;
   win = new BrowserWindow({
@@ -40,6 +41,12 @@ function createWindow(x, y) {
   win.on('closed', () => {
     win = null;
   });
+
+  win.on('show', () => {
+    if (tray && !trayHighlighted) {
+      tray.setHighlightMode('always');
+    }
+  })
 }
 
 function createTray() {
@@ -50,11 +57,12 @@ function createTray() {
 	tray = new Tray(nimage);
   tray.setToolTip('Daily logger');
 
-  let trayHighlighted = false;
 
   tray.on('click', () => {
     console.log(tray.getBounds());
     
+    // TODO: If we've highlighted the tray from clicking notification, we want to 
+    // then hide the tray on subsequent clicks
 
     if (!trayHighlighted) {
       if (!win) {
@@ -78,6 +86,7 @@ function createTray() {
 
 // Create window after electron has finished initializing
 app.on('ready', createTray);
+// TODO: When the app is started, create the Tray.  After 
 
 // When all windows are closed, quit
 app.on('window-all-closed', () => {
