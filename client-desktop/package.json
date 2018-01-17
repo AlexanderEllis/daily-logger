@@ -1,6 +1,8 @@
 {
   "name": "daily-logger",
   "version": "0.0.1",
-  "main": "main.js"
+  "main": "main.js",
+  "dependencies": {
+    "fs-jetpack": "^1.2.0"
+  }
 }
-

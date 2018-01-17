@@ -1,3 +1,4 @@
+const remote = require('electron').remote;
 
 // Define duration in minutes
 const REPEAT_EVERY_DURATION = 1;
@@ -38,6 +39,8 @@ function notifyMe() {
     
     notification.onclick = function () {
       parent.focus();
+      var window = remote.getCurrentWindow();
+      window.show();
       document.getElementById('activity').focus();
     };
   } else if (Notification.permission !== "denied") {
