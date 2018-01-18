@@ -58,8 +58,20 @@ function notifyMe() {
 }
 
 function hideLogging() {
-    document.getElementById('waiting').style.display = 'block';
-    document.getElementById('logging').style.display = 'none';
+  document.getElementById('waiting').style.display = 'block';
+  document.getElementById('logging').style.display = 'none';
+}
+
+function submitLog() {
+  const activityInput = document.getElementById('activity');
+
+  const activity = activityInput.value;
+  activityInput.value = '';
+
+  console.log('You submitted', activity);
+  // TODO: API call to submit log
+
+  hideLogging();
 }
 
 notifyAtNextDuration(REPEAT_EVERY_DURATION);

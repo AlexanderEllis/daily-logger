@@ -1,4 +1,4 @@
-const { 
+const {
   app,
   BrowserWindow,
   nativeImage,
@@ -8,7 +8,6 @@ const {
 const path = require('path');
 const url = require('url');
 const jetpack = require('fs-jetpack');
-
 
 // Global window object
 let win;
@@ -27,7 +26,12 @@ function createWindow(x, y) {
     height,
     frame: false,
     x: x - width / 2,
-    y
+    y,
+    show: false,
+    webPreferences: {
+      // TODO: For production, change this to false to make it feel like a real app
+      devTools: true
+    }
   });
 
   // Load index.html
@@ -42,51 +46,64 @@ function createWindow(x, y) {
     win = null;
   });
 
+  win.on('blur', () => {
+    // If we click away from the app, we'll want to close it
+    win.hide();
+  })
+
+  win.on('hide', () => {
+    // Clicking outside of the app will hide it, so we'll want to toggle tray icon highlight
+    if (tray && trayHighlighted) {
+      tray.setHighlightMode('never');
+      trayHighlighted = !trayHighlighted;
+    }
+  })
+
   win.on('show', () => {
+    // Clicking on the notification will show the window, so we want to also highlight the tray icon when that happens
     if (tray && !trayHighlighted) {
       tray.setHighlightMode('always');
+      trayHighlighted = !trayHighlighted;
     }
   })
 }
 
 function createTray() {
   const iconPath = path.join(__dirname, 'clipboard.png');
-  console.log(jetpack.exists(iconPath)); //should be "file", otherwise you are not pointing to your icon file 
+
+  // This is a check to make sure the file exists
+  // console.log(jetpack.exists(iconPath)); 
+
   let nimage = nativeImage.createFromPath(iconPath);
 
-	tray = new Tray(nimage);
+  tray = new Tray(nimage);
   tray.setToolTip('Daily logger');
 
+  // Get bounds to create window
+  const bounds = tray.getBounds();
+  const x = bounds.x + bounds.width / 2;
+  const y = bounds.y;
+
+  // Create hidden window when app starts so that it can load immediately at the next interval
+  createWindow(x, y);
 
   tray.on('click', () => {
-    console.log(tray.getBounds());
-    
-    // TODO: If we've highlighted the tray from clicking notification, we want to 
-    // then hide the tray on subsequent clicks
 
     if (!trayHighlighted) {
-      if (!win) {
-        const bounds = tray.getBounds();
-        const x = bounds.x + bounds.width / 2;
-        const y = bounds.y;
-
-        createWindow(x, y);
-      } else {
-        win.show()
-      }
+      win.show()
     } else {
       win.hide();
     }
 
+    // Toggle tray highlight to be highlighted when window is open
     tray.setHighlightMode(trayHighlighted ? 'never' : 'always');
     trayHighlighted = !trayHighlighted;
 
   });
 }
 
-// Create window after electron has finished initializing
+// Create tray after electron has finished initializing
 app.on('ready', createTray);
-// TODO: When the app is started, create the Tray.  After 
 
 // When all windows are closed, quit
 app.on('window-all-closed', () => {
@@ -95,11 +112,9 @@ app.on('window-all-closed', () => {
   }
 });
 
-
 // Activate when app open but windows closed (aka still in dock), open window
 app.on('activate', () => {
   if (win === null) {
     createWindow();
   }
 });
-
