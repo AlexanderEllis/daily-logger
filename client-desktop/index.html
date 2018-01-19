@@ -5,21 +5,56 @@
     <title>Daily Logger</title>
   </head>
   <body>
-    <h1>Daily Logger</h1>
-    <p>This is an app that will help you track your time.</p>
-    <div id="waiting">
-      <h3>Currently waiting to log</h3>
-    </div>
-    <div id="logging" style="display: none">
-      <h3>Logging ready!</h3>
-      <input id="activity" type="text"/>
-      <button
-        type="submit"
-        onClick="submitLog()"
-      >
-        Log
-      </button>
+    <div id="container">
+      <h1 id="title">Daily Logger</h1>
+      <p id="description">This is an app that will help you track your time.</p>
+      <div id="action">
+        <div id="waiting">
+          <h3>Currently waiting to log</h3>
+        </div>
+        <div id="logging" style="display: none">
+          <h3>Logging ready!</h3>
+          <input id="activity" type="text"/>
+          <button
+            type="submit"
+            onClick="submitLog()"
+          >
+            Log
+          </button>
+        </div>
+      </div>
     </div>
   </body>
     <script src="src/logging.js"></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      #container {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 100px 50px 150px;
+      }
+
+      #title {
+        align-self: center;
+        justify-self: center;
+      }
+
+      #description {
+        align-self: center;
+        justify-self: center;
+      }
+
+      #action {
+        align-self: center;
+        justify-self: center;
+      }
+      
+
+
+    </style>
 </html>
