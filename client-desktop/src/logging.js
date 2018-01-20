@@ -68,10 +68,27 @@ function submitLog() {
   const activity = activityInput.value;
   activityInput.value = '';
 
-  console.log('You submitted', activity);
   // TODO: API call to submit log
+  sendActivity(activity)
 
   hideLogging();
+}
+
+function sendActivity(message) {
+
+  console.log('fetching')
+  fetch(
+    "http://localhost:3000/logging",
+    {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        method: "POST",
+        body: JSON.stringify({ message })
+    }
+  );
+
 }
 
 notifyAtNextDuration(REPEAT_EVERY_DURATION);
