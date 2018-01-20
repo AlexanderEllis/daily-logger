@@ -4,6 +4,7 @@ const remote = require('electron').remote;
 const REPEAT_EVERY_DURATION = 1;
 
 function notifyAtNextDuration (duration) {
+  console.log(duration);
   var now = new Date();
   var msTilNextPeriod = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), nextPeriod(duration, now.getMinutes()), 0, 0) - now;
 
@@ -91,4 +92,9 @@ function sendActivity(message) {
 
 }
 
-notifyAtNextDuration(REPEAT_EVERY_DURATION);
+fetch('http://localhost:3000')
+  .then((response) => response.json())
+  .then((response) => {
+    notifyAtNextDuration(response.timeInterval);
+  })
+  .catch((err) => console.warn(err));

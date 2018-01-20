@@ -7,7 +7,18 @@ const app = express();
 // Middleware
 app.use(bodyParser.json());
 
-app.get('/', (req, res) => res.send('hello world'));
+// For now, basic fetch to server to get intitial interval
+// Eventually, we'd look this up for a user?
+app.get(
+  '/', 
+  (req, res) => {
+    res.send(
+      {
+        timeInterval: 1
+      }
+    );
+  }
+);
 
 app.post(
   '/logging', 
