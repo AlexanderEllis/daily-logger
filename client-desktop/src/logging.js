@@ -1,16 +1,12 @@
 const remote = require('electron').remote;
 
-// Define duration in minutes
-const REPEAT_EVERY_DURATION = 1;
-
 function notifyAtNextDuration (duration) {
-  console.log(duration);
   var now = new Date();
   var msTilNextPeriod = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), nextPeriod(duration, now.getMinutes()), 0, 0) - now;
 
   setTimeout(function(){
-    document.getElementById('waiting').style.display = 'none';
-    document.getElementById('logging').style.display = 'block';
+    changeDisplay('waiting', 'none');
+    changeDisplay('logging', 'block');
     notifyMe();
     repeatNotifications(duration);
   }, msTilNextPeriod);
@@ -18,8 +14,8 @@ function notifyAtNextDuration (duration) {
 
 function repeatNotifications (durationInMin) {
   setInterval(function() {
-    document.getElementById('waiting').style.display = 'none';
-    document.getElementById('logging').style.display = 'block';
+    changeDisplay('waiting', 'none');
+    changeDisplay('logging', 'block');
     notifyMe();
   }, durationInMin * 60 * 1000)
 }
@@ -49,7 +45,7 @@ function notifyMe() {
     Notification.requestPermission(function (permission) {
       // If the user accepts, let's create a notification
       if (permission === "granted") {
-        var notification = new Notification("Hi there!");
+        var notification = new Notification("Time to log!");
       }
     });
   }
@@ -58,26 +54,30 @@ function notifyMe() {
   // want to be respectful there is no need to bother them any more.
 }
 
-function hideLogging() {
-  document.getElementById('waiting').style.display = 'block';
-  document.getElementById('logging').style.display = 'none';
-}
-
 function submitLog() {
   const activityInput = document.getElementById('activity');
 
   const activity = activityInput.value;
   activityInput.value = '';
 
-  // TODO: API call to submit log
   sendActivity(activity)
 
-  hideLogging();
+  changeDisplay('logging', 'none');
+  changeDisplay('logged', 'block');
+
+  // Auto-hide window after two (?) seconds
+  // TODO: if user has switched to review screen, don't autohide
+  var window = remote.getCurrentWindow();
+  setTimeout(() => {
+    window.hide();
+
+    // Once the window is hidden, go back to waiting screen
+    changeDisplay('logged', 'none');
+    changeDisplay('waiting', 'block');
+  }, 2000);
 }
 
 function sendActivity(message) {
-
-  console.log('fetching')
   fetch(
     "http://localhost:3000/logging",
     {
@@ -89,8 +89,12 @@ function sendActivity(message) {
         body: JSON.stringify({ message })
     }
   );
-
 }
+
+function changeDisplay(elementId, newDisplay) {
+  document.getElementById(elementId).style.display = newDisplay;
+}
+
 
 fetch('http://localhost:3000')
   .then((response) => response.json())
