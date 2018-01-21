@@ -62,19 +62,32 @@ function submitLog() {
 
   sendActivity(activity)
 
+
+  // Auto-hide window after a few seconds and show countdown
+  // TODO: if user has switched to review screen, don't autohide
+  // TODO: Only show autohide once the user is moused away from the window?
+  var window = remote.getCurrentWindow();
+  let counter = 2;
+  let counterDisplay = document.getElementById('auto-hide-counter');
+
+  counterDisplay.innerText = counter;
+  setInterval(() => {
+    if (counter > 0) {
+      counter--;
+      counterDisplay.innerText = counter;
+    }
+  }, 1000);
+
   changeDisplay('logging', 'none');
   changeDisplay('logged', 'block');
 
-  // Auto-hide window after two (?) seconds
-  // TODO: if user has switched to review screen, don't autohide
-  var window = remote.getCurrentWindow();
   setTimeout(() => {
     window.hide();
 
     // Once the window is hidden, go back to waiting screen
     changeDisplay('logged', 'none');
     changeDisplay('waiting', 'block');
-  }, 2000);
+  }, (counter + 1) * 1000);
 }
 
 function sendActivity(message) {
