@@ -4,6 +4,8 @@ This is an app for regularly logging what you've been up to.  It's not meant to 
 
 It does so by prompting you for your activity every hour.  One of the main goals is to be as unintrusive as possible.  This is why it lives in the menubar and autohides after activity submission.
 
+![Screenshot.png](screenshot.png)
+
 ## Usage
 The current setup is an electron app in `/client-desktop` and a server in `/server`.  To start the app, run `node index.js` in `/server` and in a separate process, run `electron .` in `/client-desktop`.
 
@@ -20,5 +22,5 @@ The current setup is an electron app in `/client-desktop` and a server in `/serv
 - Notification button for "same activity"
 - Optional notification to remind you at a certain time to fill in any blank spots for the day
 - Updating past activity
-
-
+- Break out server into modules
+- Add screenshots to README.md for current status of the app after updates
