@@ -36,8 +36,8 @@ function createWindow(x, y) {
 
   // Load index.html
   win.loadURL(url.format({
-    pathname: path.join(__dirname, 'index.html'),
-    protocol: 'file:',
+    pathname: 'localhost:3000', //path.join(__dirname, 'index.html'),
+    protocol: 'http:',
     slashes: true
   }));
 
@@ -65,7 +65,7 @@ function createWindow(x, y) {
       tray.setHighlightMode('always');
       trayHighlighted = !trayHighlighted;
     }
-  })
+  });
 }
 
 function createTray() {
