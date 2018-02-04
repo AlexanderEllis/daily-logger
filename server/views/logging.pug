@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  a(href="/logout")
+    button() Logout
+
+  if user && user.user_id
+    div(id='action')
+      div(id='waiting')
+        h3 Currently waiting to log
+      div(id="logging" style="display: none")
+        h3 Logging ready!
+        input(id="activity" type="text")
+        button(type="submit" onClick='submitLog()') Log
+      div(id="logged" style="display: none")
+        h3 Good work! This will auto-hide in 
+          span(id="auto-hide-counter")
+          span seconds.
+
+    script
+      include ../js/logging.js

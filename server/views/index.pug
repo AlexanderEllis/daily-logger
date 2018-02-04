@@ -5,11 +5,14 @@ block content
     i.fa.fa-lg.fa-pie-chart 
     span Daily Logger
   h2 Helping you log what you do.
-  p To log your activity, please login.
   br
   if user && user.displayName
     p Welcome 
       span= user.displayName 
       span !
-  a(href="/login")
-    button() Login
+    a(href="/logout")
+      button() Logout
+  else
+    p To log your activity, please login.
+    a(href="/login")
+      button() Login
